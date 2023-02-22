@@ -1,12 +1,27 @@
 #q!/usr/bin/env pyhton3
+
+#Ask user to input birthdate
 while True:
     try:
         birth_date = input("Enter your birth date (in the format MM/DD/YYYY): ")
         month, day, year = map(int, birth_date.split('/'))
+#Input validation
+        if year <= 0:
+            raise ValueError("Invalid year.")
+        if year > 2023:
+            raise ValueError("Are you from the future?")
+        if day > 31 or day <= 0:
+            raise ValueError("Invalid day.")
+        if month > 12 or month <= 0:
+            raise ValueError("Invalid month.")
+        if month in [4, 6, 9, 11] and day > 30:
+            raise ValueError("Invalid day for this month.")
         break
-    except (ValueError, TypeError):
-        print("Invalid date format. Please enter in the format MM/DD/YYYY.")
+    except (ValueError, TypeError) as e:
+        if e:
+            print(e)
 
+#Set zodiac sign to calander date
 zodiac_sign = ''
 if (month == 12 and day >= 22) or (month == 1 and day <= 19):
     zodiac_sign = 'Capricorn'
@@ -33,7 +48,6 @@ elif (month == 10 and day >= 23) or (month == 11 and day <= 21):
 elif (month == 11 and day >= 22) or (month == 12 and day <= 21):
     zodiac_sign = 'Sagittarius'
 
+#Print zodiac sign
 if zodiac_sign:
-    print(f"Your zodiac sign is {zodiac_sign}.")
-else:
-    print("Invalid date.")
+(f"I had a feeling you were a {zodiac_sign}...")
