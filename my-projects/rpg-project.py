@@ -160,5 +160,3 @@ while True:
         print('You escaped the house with the ultra rare key and magic potion... YOU WIN!')
         break
 
-
-    
