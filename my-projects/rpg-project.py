@@ -8,18 +8,18 @@ def showInstructions():
     """Show the game instructions when called"""
     # print a main menu and the commands
     print('''
-    RPG Game
-    ========
+           Dungeon Warrior I
+    ==============================
     Get through the dungeon by
     collecting items and defeating
     the boss!
-    ========
+    ==============================
     Commands:
-      go [direction]
-      get [item]
-      attack
-      heal
-      quit
+    go [direction]
+    get [item]
+    attack
+    heal
+    quit
     ''')
 
 
@@ -32,13 +32,6 @@ def showStatus():
     print('Health:', playerHealth)
     print('Lives:', playerLives)
     print('Inventory:', inventory)
-    if 'sword' in inventory:
-        print('Your sword is glowing with power!')
-    # check if there's an item in the room, if so print it
-    if "item" in rooms[currentRoom]:
-        print('You see a ' + rooms[currentRoom]['item'])
-    if 'enemy' in rooms[currentRoom]:
-        print('You see a ' + rooms[currentRoom]['enemy'])
 
     # main room
     if currentRoom == 'Main Room' and 'compass' in inventory:
@@ -46,59 +39,125 @@ def showStatus():
         up = Jail Room
         down = Dungeon Entrance
         left = Armory
-        right = Eastern Room''')
+        right = Goblin\'s Kitchen
+        ''')
 
     # dungeon entrance
     if currentRoom == 'Dungeon Entrance' and 'compass' in inventory:
         print('''
-        up = Main Room''')
+        up = Main Room
+        ''')
 
-    # eastern room
-    if currentRoom == 'Eastern Room' and 'compass' in inventory:
+    # goblin kitchen
+    if currentRoom == 'Goblin\'s Kitchen' and 'compass' in inventory:
         print('''
-        up = Boss Room
-        left = Main Room''')
+        up = Ogre\'s Cave
+        left = Main Room
+        ''')
+        if 'battle-axe' in inventory:
+            print('A mysterious old man appears in front of you...')
+            print('Old Man: You found the secret room!')
+        else:   
+            print('A mysterious old man appears in front of you...')
+            print("Old Man: Don't always rely on the compass...")
 
     # armory
     if currentRoom == 'Armory' and 'compass' in inventory:
         print('''
         up = Basement
-        right = Main Room''')
+        down = Garden
+        right = Main Room
+        ''')
+        if 'compass' in inventory:
+            print('A mysterious old man appears in front of you...')
+            print('Old Man: You found my old compass!')
+        else:   
+            print('A mysterious old man appears in front of you...')
+            print("Old Man: Those dang monsters stole my most precious item...")
 
     # basement
     if currentRoom == 'Basement' and 'compass' in inventory:
         print('''
-        down = Armory''')
+        down = Armory
+        ''')
 
     # key room
     if currentRoom == 'Key Room' and 'compass' in inventory:
         print('''
-        right = Northern Room''')
+        right = Northern Room
+        ''')
 
     # northern room
     if currentRoom == 'Northern Room' and 'compass' in inventory:
         print('''
         down = Jail Room
-        left = Key Room''')
+        left = Key Room
+        ''')
 
-    # boss room
-    if currentRoom == 'Boss Room' and 'compass' in inventory:
+    # ogre's cave
+    if currentRoom == 'Ogre\'s Cave' and 'compass' in inventory:
         print('''
-        up = Treasure Room
-        down = Eastern Room''')
+        up = Hero\'s Sanctuary
+        down = Goblin\'s Kitchen
+        left = Jail Room
+        ''')
 
     # jail room
     if currentRoom == 'Jail Room' and 'compass' in inventory:
         print('''
         up = Northern Room
-        down = Main Room''')
-    
-    # hints
-    if currentRoom == 'Jail Room' and 'enemy' in rooms['Northern Room'] and 'monster' in rooms['Northern Room']['enemy']:
-        print("I hear something ahead...")
-    
-    if currentRoom == 'Eastern Room' and 'enemy' in rooms['Boss Room'] and 'monster' in rooms['Boss Room']['enemy']:
-        print("I hear something ahead...")
+        down = Main Room
+        right = Ogre\'s Cave
+        ''')
+
+    #Hero's sanctuary
+    if currentRoom == 'Hero\'s Sanctuary' and 'compass' in inventory:
+        print('''
+        down = Orge\'s Cave
+        right = Troll Hall
+        ''')
+
+    #Garden
+    if currentRoom == 'Garden' and 'compass' in inventory:
+        print('''
+        up = Armory
+        ''')
+
+    #Troll Hall
+    if currentRoom == 'Troll Hall' and 'compass' in inventory:
+        print('''
+        down = Dragon\'s Gate
+        left = Hero\'s Sanctuary
+        ''')
+
+    #Dragon Gate
+    if currentRoom == 'Dragon\'s Gate' and 'compass' in inventory:
+        print('''
+        up = Troll Hall
+        down = Dragon\'s Nest
+        left = Hole
+        ''')
+
+    #Dragon nest
+    if currentRoom == 'Dragon\'s Nest' and 'compass' in inventory:
+        print('''
+        down = Treasure Room
+        up = Dragon\'s Gate
+        ''')   
+
+    #secret room
+    if currentRoom == 'Secret Room' and 'compass' in inventory:
+        print('''
+        up = Goblin\'s Kitchen
+        ''') 
+
+    # check if there's an item in the room, if so print it
+    if "item" in rooms[currentRoom]:
+        print('You see a ' + rooms[currentRoom]['item'])
+    if 'enemy' in rooms[currentRoom]:
+        print('A ' + rooms[currentRoom]['enemy'] + ' is attacking you')
+    if 'boss' in rooms[currentRoom]:
+        print('A ' + rooms[currentRoom]['boss'] + ' is staring down at you...')
     
     print("---------------------------")
 
@@ -109,36 +168,56 @@ inventory = []
 rooms = {
 
     'Dungeon Entrance': {
-        'up': 'Main Room'
+        'up': 'Main Room',
+        'item': 'sword'
     },
 
     'Main Room': {
         'down': 'Dungeon Entrance',
         'up': 'Jail Room',
         'left': 'Armory',
-        'right': 'Eastern Room'
+        'right': 'Goblin\'s Kitchen',
+        'enemy': 'monster'
     },
 
     'Armory': {
         'right': 'Main Room',
         'up': 'Basement',
-        'item': 'compass'
+        'down': 'Garden',
+    },
+
+    'Garden': {
+        'up': 'Armory',
+        'enemy': 'monster'
     },
 
     'Basement': {
         'down': 'Armory',
-        'item': 'sword'
     },
 
     'Jail Room': {
         'up': 'Northern Room',
+        'right': 'Ogre\'s Cave',
         'down': 'Main Room'
+    },
+
+    'Ogre\'s Cave': {
+        'left': 'Jail Room',
+        'up': 'Hero\'s Sanctuary',
+        'down': 'Goblin\'s Kitchen',
+        'enemy': 'monster',
+    },
+
+    'Hero\'s Sanctuary': {
+        'down': 'Ogre\'s Cave',
+        'right': 'Troll Hall',
+        'item': 'potion'
     },
 
     'Northern Room': {
         'down': 'Jail Room',
         'left': 'Key Room',
-        'enemy': 'monster'
+        'enemy': 'monster',
     },
 
     'Key Room': {
@@ -146,21 +225,39 @@ rooms = {
         'item': 'key'
     },
 
-    'Eastern Room': {
+    'Goblin\'s Kitchen': {
         'left': 'Main Room',
-        'up': 'Boss Room',
+        'up': 'Ogre\'s Cave',
+        'down': 'Secret Room',
         'item': 'potion'
     },
 
-    'Boss Room': {
-        'up': 'Treasure Room',
-        'down': 'Eastern Room',
-        'enemy': 'boss'
+    'Dragon\'s Nest': {
+        'down': 'Treasure Room',
+        'up': 'Dragon\'s Gate',
+        'boss': 'Dragon'
+    },
+
+    'Dragon\'s Gate': {
+        'up': 'Troll Hall',
+        'down': 'Dragon\'s Nest',
+        'left': 'hole',
+        'item': 'potion'
+    },
+
+    'Troll Hall': {
+        'left': 'Hero\'s Sanctuary',
+        'down': 'Dragon\'s Gate',
+        'enemy': 'monster'
     },
 
     'Treasure Room': {
-        'down': 'Boss Room',
         'item' : 'bitcoin'
+    },
+
+    'Secret Room': {
+        'up': 'Goblin\'s Kitchen',
+        'item': 'battle-axe'
     }
 
 }
@@ -180,7 +277,21 @@ monsterHealth = 100
 #add boss health
 bossHealth = 150
 
-playerDamage = 10
+#add player attack ranges
+playerDamage = random.randint(0, 20)
+
+#if player has a weapon, they're stronger
+if 'sword' in inventory:
+    playerDamage = random.randint(0, 35)   
+if 'battle-axe' in inventory:
+    playerDamage = random.randint(0, 45)    
+
+#add monster attack ranges
+monsterDamage = random.randint(0, 25)
+
+#add boss attack ranges
+bossDamage = random.randint(0, 30)
+
 
 showInstructions()
 
@@ -201,70 +312,75 @@ while True:
         continue
 
     # if they type 'attack'
-    if move[0] == 'attack':
-        #add player attack ranges
-        playerDamage = random.randint(0, 20)
-        #if player has a sword, they're stronger
-        if 'sword' in inventory:
-            playerDamage = random.randint(0, 35)                                                         
-        #add monster attack ranges
-        monsterDamage = random.randint(0, 25)
-        #add boss attack ranges
-        bossDamage = random.randint(0, 30)
-
+    elif move[0] == 'attack':
         #fight against monsters
         if 'enemy' in rooms[currentRoom] and 'monster' in rooms[currentRoom]['enemy']:
             print('You attacked the monster!')
             monsterHealth -= playerDamage
             if monsterHealth <= 0:
-                print('You defeated the monster! Well done!')
+                print('You defeated the monster! Well done')
                 del rooms[currentRoom]['enemy']
                 monsterHealth = 100
+                if 'compass' not in inventory:
+                    if random.randint(1, 100) <= 25:  # 20% chance of dropping a compass
+                        print('They dropped a compass!')
+                        inventory.append('compass')                  
             else:
                 print('The monster has', monsterHealth, 'health left.')
                 print('The monster attacks you back!')
                 playerHealth -= monsterDamage
                 if playerHealth <= 0:
-                    print('The monster killed you! Game over!')
-                    print('You respawned at the entrance')
-                    playerLives -= 1
-                    currentRoom = 'Dungeon Entrance'
-                    playerHealth = 100
-                    monsterHealth = 100
+                    if playerLives <= 1:
+                        print('The monster killed you!')
+                        print('You lost all your lives')
+                        print('GAME OVER')
+                        break
+                    else:
+                        print('The monster killed you!')
+                        print('You respawned at the entrance')
+                        playerLives -= 1
+                        currentRoom = 'Dungeon Entrance'
+                        playerHealth = 100
+                        monsterHealth = 100
                 else:
                     print('You have', playerHealth, 'health left.')
+        else:
+            print('There\'s nothing to attack')
 
         #fight against boss
-        if 'enemy' in rooms[currentRoom] and 'boss' in rooms[currentRoom]['enemy']:
-            print('You attacked the big monster!')
+        if 'boss' in rooms[currentRoom] and 'Dragon' in rooms[currentRoom]['boss']:
+            print('You attacked the Dragon!')
             bossHealth -= playerDamage
             if bossHealth <= 0:
-                print('You defeated the monster! Well done!')
-                del rooms[currentRoom]['enemy']
+                print('You defeated the Dragon! Well done!')
+                del rooms[currentRoom]['boss']
             else:
-                print('The big monster has', bossHealth, 'health left.')
-                print('The big monster attacks you back!')
+                print('The Dragon has', bossHealth, 'health left.')
+                print('The Dragon attacks you back!')
                 playerHealth -= bossDamage
                 if playerHealth <= 0:
-                    print('The monster killed you! Game over!')
-                    print('You respawned at the entrance')
-                    playerLives -= 1
-                    currentRoom = 'Dungeon Entrance'
-                    playerHealth = 100
-                    bossHealth = 100
+                    if playerLives <= 1:
+                        print('The Dragon killed you!')
+                        print('You lost all your lives')
+                        print('GAME OVER')
+                        break
+                    else:
+                        print('The Dragon killed you!')
+                        print('You respawned at the entrance')
+                        playerLives -= 1
+                        currentRoom = 'Dungeon Entrance'
+                        playerHealth = 100
+                        bossHealth = 150
                 else:
                     print('You have', playerHealth, 'health left.')
-
-        else:
-            print('You can\'t do that right now')
 
     # if they type 'go' first
     elif move[0] == 'go':
         if 'enemy' in rooms[currentRoom] and 'monster' in rooms[currentRoom]['enemy']:
-            print('Their\'s a monster blocking the way!')
+            print('A monster is attacking you!')
             continue
-        if 'enemy' in rooms[currentRoom] and 'boss' in rooms[currentRoom]['enemy']:
-            print('Their\'s a big monster blocking the way!')
+        if 'boss' in rooms[currentRoom] and 'Dragon' in rooms[currentRoom]['boss']:
+            print('The Dragon is attacking you!')
             continue
     # check that they are allowed wherever they want to go
         if len(move) < 2:
@@ -272,13 +388,16 @@ while True:
             continue
         if move[1] in rooms[currentRoom]:
             # Check if the player is trying to move to the Treasure Room
-            if rooms[currentRoom][move[1]] == 'Treasure Room':
+            if rooms[currentRoom][move[1]] == 'Dragon\'s Nest':
                 # If they have the key, allow them to move to the Treasure Room
                 if 'key' in inventory:
                     currentRoom = rooms[currentRoom][move[1]]
                 # Otherwise, print a message informing the player that they need the key to enter the room
                 else:
-                    print('You need the key to enter the Treasure Room!')
+                    print('You need a key to unlock the gate!') 
+            elif rooms[currentRoom][move[1]] == 'hole':
+                print('You fell into a hole and are back at the entrance!')          
+                currentRoom = 'Dungeon Entrance'
             # If they are trying to move to a different room, set the current room to the new room
             else:
                 currentRoom = rooms[currentRoom][move[1]]
@@ -289,10 +408,10 @@ while True:
     # if they type 'get' first
     elif move[0] == 'get':
         if 'enemy' in rooms[currentRoom] and 'monster' in rooms[currentRoom]['enemy']:
-            print('Their\'s a monster blocking the way!')
+            print('A monster is attacking you!')
             continue
-        if 'enemy' in rooms[currentRoom] and 'boss' in rooms[currentRoom]['enemy']:
-            print('Their\'s a big monster blocking the way!')
+        if 'boss' in rooms[currentRoom] and 'Dragon' in rooms[currentRoom]['boss']:
+            print('The Dragon is attacking you!')
             continue
         if len(move) < 2:
             print("Invalid input. Please enter a valid item to get.")
@@ -333,13 +452,6 @@ while True:
     # if they type anything else
     else:
         print('Invalid command! Please try again.')
-
-    # if they run out of lives
-    if playerLives <= 0:
-        print('You lost all your lives')
-        print('GAME OVER')
-        break
-
 
     # Define how a player can win
     if 'bitcoin' in inventory:
