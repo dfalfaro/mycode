@@ -3,8 +3,23 @@
    a dictionary object"""
 
 import random
+import pygame
+import os
+
+os.environ["SDL_AUDIODRIVER"] = "dummy"
+
+# Initialize Pygame
+pygame.mixer.init()
+
+# Load the music file
+pygame.mixer.music.load('/home/student/mycode/my-projects/music/battle-of-the-dragons-8037.mp3')
+
+# Play the music on loop
+pygame.mixer.music.play(-1)
 
 def showInstructions():
+
+
     """Show the game instructions when called"""
     # print a main menu and the commands
     print('''
@@ -34,14 +49,20 @@ def showStatus():
     print('Inventory:', inventory)
 
     # main room
-    if currentRoom == 'Main Room' and 'compass' in inventory:
-        print('''
-        up = Jail Room
-        down = Dungeon Entrance
-        left = Armory
-        right = Goblin\'s Kitchen
-        ''')
-
+    if currentRoom == 'Main Room':
+        if 'compass' in inventory:
+            print('''
+            up = Jail Room
+            down = Dungeon Entrance
+            left = Armory
+            right = Goblin\'s Kitchen
+            ''')
+            print('The mysterious old man appears in front of you...')
+            print('Old Man: You found my old compass!')
+        else:
+            print('A mysterious old man appears in front of you...')
+            print("Old Man: Those dang monsters stole my most precious item...")
+            
     # dungeon entrance
     if currentRoom == 'Dungeon Entrance' and 'compass' in inventory:
         print('''
@@ -54,26 +75,17 @@ def showStatus():
         up = Ogre\'s Cave
         left = Main Room
         ''')
-        if 'battle-axe' in inventory:
-            print('A mysterious old man appears in front of you...')
-            print('Old Man: You found the secret room!')
-        else:   
-            print('A mysterious old man appears in front of you...')
-            print("Old Man: Don't always rely on the compass...")
+        print('The mysterious old man appears in front of you...')
+        print("Old Man: Don't always rely on the compass...")
 
     # armory
-    if currentRoom == 'Armory' and 'compass' in inventory:
+    if currentRoom == 'Armory' and 'compass' in inventory:     
         print('''
         up = Basement
         down = Garden
         right = Main Room
         ''')
-        if 'compass' in inventory:
-            print('A mysterious old man appears in front of you...')
-            print('Old Man: You found my old compass!')
-        else:   
-            print('A mysterious old man appears in front of you...')
-            print("Old Man: Those dang monsters stole my most precious item...")
+            
 
     # basement
     if currentRoom == 'Basement' and 'compass' in inventory:
@@ -86,6 +98,11 @@ def showStatus():
         print('''
         right = Northern Room
         ''')
+        if 'key' in inventory:
+            print("Old Man: Use that key to unlock the Dragon\'s Gate!")
+        else:
+            print('The mysterious old man appears in front of you...')
+            print("You're gonna need this key to get to the Dragon...")
 
     # northern room
     if currentRoom == 'Northern Room' and 'compass' in inventory:
@@ -116,12 +133,20 @@ def showStatus():
         down = Orge\'s Cave
         right = Troll Hall
         ''')
+        if 'battle-axe' in inventory:
+            print('You feel stronger...')
+        else:
+            print('You feel a strange power in this room...')
 
     #Garden
-    if currentRoom == 'Garden' and 'compass' in inventory:
-        print('''
-        up = Armory
-        ''')
+    if currentRoom == 'Garden':
+        if 'compass' in inventory:
+            print('''
+            up = Armory
+            ''')
+        else:
+            print('There\'s a fairy in the Garden!')
+            print('Fairy: You don\'t need that old man\'s precious item... but it helps!')
 
     #Troll Hall
     if currentRoom == 'Troll Hall' and 'compass' in inventory:
@@ -148,14 +173,19 @@ def showStatus():
     #secret room
     if currentRoom == 'Secret Room' and 'compass' in inventory:
         print('''
-        up = Goblin\'s Kitchen
-        ''') 
+        down = Hero\'s Sanctuary
+        ''')
+        if 'battle-axe' in inventory:
+            print('I\'m too old for it anyway')
+        else:
+            print('It\'s dangerous ahead... take this.')
+
 
     # check if there's an item in the room, if so print it
     if "item" in rooms[currentRoom]:
         print('You see a ' + rooms[currentRoom]['item'])
     if 'enemy' in rooms[currentRoom]:
-        print('A ' + rooms[currentRoom]['enemy'] + ' is attacking you')
+        print('You encountered a ' + rooms[currentRoom]['enemy'])
     if 'boss' in rooms[currentRoom]:
         print('A ' + rooms[currentRoom]['boss'] + ' is staring down at you...')
     
@@ -177,22 +207,22 @@ rooms = {
         'up': 'Jail Room',
         'left': 'Armory',
         'right': 'Goblin\'s Kitchen',
-        'enemy': 'monster'
     },
 
     'Armory': {
         'right': 'Main Room',
         'up': 'Basement',
         'down': 'Garden',
+        'enemy': 'monster'
     },
 
     'Garden': {
         'up': 'Armory',
-        'enemy': 'monster'
     },
 
     'Basement': {
         'down': 'Armory',
+        'enemy': 'monster'
     },
 
     'Jail Room': {
@@ -210,6 +240,7 @@ rooms = {
 
     'Hero\'s Sanctuary': {
         'down': 'Ogre\'s Cave',
+        'up': 'Secret Room',
         'right': 'Troll Hall',
         'item': 'potion'
     },
@@ -228,7 +259,6 @@ rooms = {
     'Goblin\'s Kitchen': {
         'left': 'Main Room',
         'up': 'Ogre\'s Cave',
-        'down': 'Secret Room',
         'item': 'potion'
     },
 
@@ -252,11 +282,11 @@ rooms = {
     },
 
     'Treasure Room': {
-        'item' : 'bitcoin'
+        'item' : 'chest'
     },
 
     'Secret Room': {
-        'up': 'Goblin\'s Kitchen',
+        'down': 'Hero\'s Sanctuary',
         'item': 'battle-axe'
     }
 
@@ -276,22 +306,6 @@ monsterHealth = 100
 
 #add boss health
 bossHealth = 150
-
-#add player attack ranges
-playerDamage = random.randint(0, 20)
-
-#if player has a weapon, they're stronger
-if 'sword' in inventory:
-    playerDamage = random.randint(0, 35)   
-if 'battle-axe' in inventory:
-    playerDamage = random.randint(0, 45)    
-
-#add monster attack ranges
-monsterDamage = random.randint(0, 25)
-
-#add boss attack ranges
-bossDamage = random.randint(0, 30)
-
 
 showInstructions()
 
@@ -313,6 +327,20 @@ while True:
 
     # if they type 'attack'
     elif move[0] == 'attack':
+        #add player attack ranges
+        playerDamage = random.randint(0, 20)  
+
+        #add monster attack ranges
+        monsterDamage = random.randint(0, 20)
+
+        #add boss attack ranges
+        bossDamage = random.randint(0, 30)
+
+        #if player has a weapon, they're stronger
+        if 'sword' in inventory:
+            playerDamage = random.randint(0, 35)   
+        if 'battle-axe' in inventory:
+            playerDamage = random.randint(0, 45)  
         #fight against monsters
         if 'enemy' in rooms[currentRoom] and 'monster' in rooms[currentRoom]['enemy']:
             print('You attacked the monster!')
@@ -322,7 +350,7 @@ while True:
                 del rooms[currentRoom]['enemy']
                 monsterHealth = 100
                 if 'compass' not in inventory:
-                    if random.randint(1, 100) <= 25:  # 20% chance of dropping a compass
+                    if random.randint(1, 100) <= 30:  # 30% chance of dropping a compass
                         print('They dropped a compass!')
                         inventory.append('compass')                  
             else:
@@ -433,15 +461,20 @@ while True:
 
     # healing with potion
     elif move[0] == 'heal':
-        if "potion" in inventory:
+        if currentRoom == 'Garden':
             if playerHealth == 100:
-                print('Your health is full')
+                print('Your health is full.')
             else:
+                print('The Fairy healed your wounds!')
+                playerHealth = 100
+        if playerHealth == 100:
+            print('Your health is full')
+            if "potion" in inventory:
                 playerHealth = 100
                 print('you regenerated your health!')
                 inventory.remove('potion')
-        else:
-            print("You have no potions")
+            else:
+                print('You have no potions')
 
     # if they type 'quit'
     elif move[0] == 'quit':
@@ -454,6 +487,6 @@ while True:
         print('Invalid command! Please try again.')
 
     # Define how a player can win
-    if 'bitcoin' in inventory:
-        print('You defeated the monster and got 1 million bitcoin... YOU WIN!')
+    if 'chest' in inventory:
+        print('You opened the chest and got 1 trillion dollars... YOU WIN!')
         break
