@@ -3,19 +3,6 @@
    a dictionary object"""
 
 import random
-import pygame
-import os
-
-os.environ["SDL_AUDIODRIVER"] = "dummy"
-
-# Initialize Pygame
-pygame.mixer.init()
-
-# Load the music file
-pygame.mixer.music.load('/home/student/mycode/my-projects/music/battle-of-the-dragons-8037.mp3')
-
-# Play the music on loop
-pygame.mixer.music.play(-1)
 
 def showInstructions():
 
